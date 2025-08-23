@@ -37,7 +37,7 @@ SPC f r
 Arquivos recentes
 Lista arquivos recentemente abertos
 
-# 🗂️ Explorer - SPC e
+🗂️ Explorer - SPC e
 Atalho
 Função
 Uso
@@ -45,7 +45,7 @@ SPC e
 Abrir/fechar explorer
 Ver estrutura de pastas do projeto
 
-# 📄 Buffers - SPC b
+📄 Buffers - SPC b
 Atalho
 Função
 Explicação
@@ -56,7 +56,7 @@ SPC b d
 Fechar buffer
 Fecha o arquivo atual
 
-# 🪟 Janelas - SPC w
+🪟 Janelas - SPC w
 Atalho
 Função
 Uso
@@ -73,7 +73,7 @@ SPC w o
 Fechar outras janelas
 Mantém só a janela atual
 
-# 💻 Terminal - SPC t
+💻 Terminal - SPC t
 Atalho
 Função
 Uso
@@ -81,7 +81,7 @@ SPC t t
 Toggle terminal
 Abre/fecha terminal na parte inferior
 
-# 🔍 Busca - SPC s
+🔍 Busca - SPC s
 Atalho
 Função
 Uso
@@ -90,7 +90,7 @@ Buscar no arquivo
 Procura texto no arquivo atual
 
 
-# 🔧 LSP (Language Server) - SPC l
+#🔧 LSP (Language Server) - SPC l
 Para C e JavaScript (quando LSP está ativo)
 Atalho
 Função
