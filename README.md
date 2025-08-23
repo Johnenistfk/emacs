@@ -1,4 +1,3 @@
-# 📖 Manual Emacs - Desenvolvimento C e JavaScript
 # 🚀 Início Rápido
 Abrindo o Emacs
 Iniciar Emacs limpo
