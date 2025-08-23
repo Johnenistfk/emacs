@@ -1,18 +1,18 @@
-📖 Manual Emacs - Desenvolvimento C e JavaScript
-🚀 Início Rápido
+# 📖 Manual Emacs - Desenvolvimento C e JavaScript
+# 🚀 Início Rápido
 Abrindo o Emacs
-# Iniciar Emacs limpo
+Iniciar Emacs limpo
 emacs
 
-# Abrir arquivo específico
+Abrir arquivo específico
 emacs meuarquivo.c
 emacs script.js
 
-# Abrir em modo gráfico (se estiver no terminal)
+Abrir em modo gráfico (se estiver no terminal)
 emacs &
 
 
-🎯 Conceitos Básicos
+# 🎯 Conceitos Básicos
 Estados do Evil Mode (Como Vim)
 Normal Mode 🔵: Para navegação e comandos (padrão ao iniciar)
 Insert Mode 🟢: Para digitar texto (pressione i)
@@ -23,7 +23,7 @@ ESC ou C-c - Voltar para Normal Mode
 v - Visual Mode (seleção)
 V - Visual Line Mode (seleção de linhas)
 
-⌨️ Atalhos Essenciais (Normal Mode)
+# ⌨️ Atalhos Essenciais (Normal Mode)
 📁 Arquivos - SPC f
 Atalho
 Função
@@ -38,7 +38,7 @@ SPC f r
 Arquivos recentes
 Lista arquivos recentemente abertos
 
-🗂️ Explorer - SPC e
+# 🗂️ Explorer - SPC e
 Atalho
 Função
 Uso
@@ -46,7 +46,7 @@ SPC e
 Abrir/fechar explorer
 Ver estrutura de pastas do projeto
 
-📄 Buffers - SPC b
+# 📄 Buffers - SPC b
 Atalho
 Função
 Explicação
@@ -57,7 +57,7 @@ SPC b d
 Fechar buffer
 Fecha o arquivo atual
 
-🪟 Janelas - SPC w
+# 🪟 Janelas - SPC w
 Atalho
 Função
 Uso
@@ -74,7 +74,7 @@ SPC w o
 Fechar outras janelas
 Mantém só a janela atual
 
-💻 Terminal - SPC t
+# 💻 Terminal - SPC t
 Atalho
 Função
 Uso
@@ -82,7 +82,7 @@ SPC t t
 Toggle terminal
 Abre/fecha terminal na parte inferior
 
-🔍 Busca - SPC s
+# 🔍 Busca - SPC s
 Atalho
 Função
 Uso
@@ -91,7 +91,7 @@ Buscar no arquivo
 Procura texto no arquivo atual
 
 
-🔧 LSP (Language Server) - SPC l
+# 🔧 LSP (Language Server) - SPC l
 Para C e JavaScript (quando LSP está ativo)
 Atalho
 Função
@@ -110,7 +110,7 @@ Code actions
 Mostra ações disponíveis (fix erros, etc.)
 
 
-📝 Navegação Básica (Normal Mode)
+# 📝 Navegação Básica (Normal Mode)
 Movimento do Cursor
 Tecla
 Movimento
@@ -195,7 +195,7 @@ SPC t t (Terminal)
 gcc main.c -o hello
 ./hello
 
-🌐 Workflow para JavaScript
+# 🌐 Workflow para JavaScript
 1. Criando projeto JavaScript
 mkdir meu_projeto_js
 cd meu_projeto_js
@@ -232,7 +232,7 @@ SPC f s (Salvar)
 SPC t t (Terminal)
 node app.js
 
-🔥 Dicas Avançadas
+# 🔥 Dicas Avançadas
 1. Múltiplos arquivos
 SPC b b → Alternar rapidamente entre arquivos abertos
 SPC w v → Split vertical para ver 2 arquivos lado a lado
@@ -250,7 +250,7 @@ p → Colar
 Salvar já formata automaticamente (configurado no LSP)
 SPC l f → Forçar formatação manual
 
-🐛 Debug e Compilação
+# 🐛 Debug e Compilação
 Para C
 # Terminal no Emacs (SPC t t)
 gcc -g -Wall main.c -o debug_program
@@ -263,7 +263,7 @@ node --inspect app.js
 node app.js
 
 
-🆘 Comandos de Emergência
+# 🆘 Comandos de Emergência
 Situação
 Solução
 Travou tudo
@@ -278,7 +278,7 @@ Terminal não aparece
 SPC t t duas vezes
 
 
-📚 Comandos por Categoria
+# 📚 Comandos por Categoria
 Essenciais Diários
 SPC f f - Abrir arquivo
 SPC f s - Salvar
@@ -296,7 +296,7 @@ SPC b b - Trocar buffer
 SPC b d - Fechar arquivo
 SPC q q - Sair salvando
 
-🎯 Exercício Prático
+# 🎯 Exercício Prático
 Projeto: Calculadora em C
 Criar estrutura:
 mkdir calculadora_c
@@ -320,20 +320,8 @@ SPC f f → todo.js
 SPC f f → index.html
 Implementar e testar no browser/node
 
-🔧 Instalação de LSP Servers
-Para C (clangd)
-# Ubuntu/Debian
-sudo apt install clangd
 
-# macOS
-brew install llvm
-
-Para JavaScript (typescript-language-server)
-npm install -g typescript-language-server typescript
-
-Após instalar, reinicie o Emacs e abra um arquivo .c ou .js - o LSP deve ativar automaticamente!
-
-⚡ Resumo dos Atalhos Mais Usados
+# ⚡ Resumo dos Atalhos Mais Usados
 Função
 Atalho
 Use quando
