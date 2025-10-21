@@ -233,4 +233,9 @@
 (message "🚀 Emacs configurado com sucesso!")
 
 (provide 'init)
+
+(use-package treesit-auto
+  :ensure t
+  :config
+  (global-treesit-auto-mode))
 ;;; init.el ends here
