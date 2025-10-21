@@ -238,4 +238,12 @@
   :ensure t
   :config
   (global-treesit-auto-mode))
+
+(use-package vterm
+  :ensure t
+  :config
+  (setq vterm-max-scrollback 10000)
+  (setq vterm-shell "/bin/bash")  ; ou /bin/zsh, /bin/fish
+  ;; Desabilitar line numbers
+  (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1))))
 ;;; init.el ends here
