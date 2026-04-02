@@ -1,358 +1,227 @@
-# 🚀 Início Rápido
-Abrindo o Emacs
-Iniciar Emacs limpo
+# Emacs — Configuração Minimalista para Clojure & PHP
+
+Configuração do Emacs focada em produtividade para desenvolvimento Clojure e PHP, com Evil Mode, CIDER REPL, LSP via Eglot e Projectile.
+
+---
+
+## Dependências Externas
+
+Antes de usar, instale as seguintes ferramentas no sistema:
+
+| Ferramenta | Finalidade | Instalação |
+|------------|------------|------------|
+| `clojure-lsp` | LSP para Clojure | [clojure-lsp.io](https://clojure-lsp.io) |
+| `intelephense` | LSP para PHP | `npm install -g intelephense` |
+| `leiningen` | Gerenciador de projetos Clojure | [leiningen.org](https://leiningen.org) |
+| `vterm` | Terminal integrado | Requer suporte a `libvterm` na compilação do Emacs |
+
+---
+
+## Instalação
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/seu-repo.git ~/.emacs.d
+
+# Inicie o Emacs — os pacotes serão instalados automaticamente
 emacs
+```
 
-Abrir arquivo específico
-emacs meuarquivo.c
-emacs script.js
+Na primeira inicialização o Emacs baixa e instala todos os pacotes automaticamente. Aguarde a conclusão antes de abrir qualquer arquivo.
 
-Abrir em modo gráfico (se estiver no terminal)
-emacs &
+---
 
+## Conceitos Básicos — Evil Mode
 
-# 🎯 Conceitos Básicos
-Estados do Evil Mode (Como Vim)
-Normal Mode 🔵: Para navegação e comandos (padrão ao iniciar)
-Insert Mode 🟢: Para digitar texto (pressione i)
-Visual Mode 🟡: Para seleção de texto (pressione v)
-Como Mudar de Estado
-i - Entrar no Insert Mode
-ESC ou C-c - Voltar para Normal Mode
-v - Visual Mode (seleção)
-V - Visual Line Mode (seleção de linhas)
+O Evil Mode emula o Vim dentro do Emacs. Existem três estados principais:
 
-# ⌨️ Atalhos Essenciais (Normal Mode)
-📁 Arquivos - SPC f
-Atalho
-Função
-Exemplo
-SPC f f
-Abrir arquivo
-Navega e abre qualquer arquivo
-SPC f s
-Salvar arquivo
-Salva o arquivo atual
-SPC f r
-Arquivos recentes
-Lista arquivos recentemente abertos
+| Estado | Ativação | Finalidade |
+|--------|----------|------------|
+| Normal | `ESC` ou `C-c` | Navegação e atalhos de leader key |
+| Insert | `i` | Digitação e edição de texto |
+| Visual | `v` / `V` | Seleção de caracteres ou linhas |
 
-🗂️ Explorer - SPC e
-Atalho
-Função
-Uso
-SPC e
-Abrir/fechar explorer
-Ver estrutura de pastas do projeto
+> **Regra de ouro:** todos os atalhos com `SPC` funcionam a partir do Normal Mode.
 
-📄 Buffers - SPC b
-Atalho
-Função
-Explicação
-SPC b b
-Trocar buffer
-Alterna entre arquivos abertos
-SPC b d
-Fechar buffer
-Fecha o arquivo atual
+---
 
-🪟 Janelas - SPC w
-Atalho
-Função
-Uso
-SPC w v
-Split vertical
-Divide tela em 2 verticalmente
-SPC w s
-Split horizontal
-Divide tela em 2 horizontalmente
-SPC w d
-Fechar janela
-Remove divisão atual
-SPC w o
-Fechar outras janelas
-Mantém só a janela atual
+## Navegação
 
-💻 Terminal - SPC t
-Atalho
-Função
-Uso
-SPC t t
-Toggle terminal
-Abre/fecha terminal na parte inferior
+### Movimento do Cursor
 
-🔍 Busca - SPC s
-Atalho
-Função
-Uso
-SPC s s
-Buscar no arquivo
-Procura texto no arquivo atual
+| Tecla | Movimento |
+|-------|-----------|
+| `h` | Esquerda |
+| `j` | Baixo |
+| `k` | Cima |
+| `l` | Direita |
+| `w` | Próxima palavra |
+| `b` | Palavra anterior |
+| `0` | Início da linha |
+| `$` | Final da linha |
+| `gg` | Início do arquivo |
+| `G` | Final do arquivo |
+| `C-u` | Rola meia tela para cima |
+| `C-d` | Rola meia tela para baixo |
 
+### Edição Rápida
 
-#🔧 LSP (Language Server) - SPC l
-Para C e JavaScript (quando LSP está ativo)
-Atalho
-Função
-Exemplo
-SPC l d
-Ir para definição
-Pula para onde função/variável foi definida
-SPC l r
-Renomear símbolo
-Renomeia variável/função em todo projeto
-SPC l f
-Formatar código
-Auto-formata o código
-SPC l a
-Code actions
-Mostra ações disponíveis (fix erros, etc.)
+| Tecla | Ação |
+|-------|------|
+| `i` | Insert Mode antes do cursor |
+| `a` | Insert Mode após o cursor |
+| `o` | Nova linha abaixo e Insert Mode |
+| `x` | Deletar caractere |
+| `dd` | Deletar linha inteira |
+| `yy` | Copiar linha |
+| `p` | Colar |
+| `u` | Desfazer |
+| `C-r` | Refazer |
 
+---
 
-# 📝 Navegação Básica (Normal Mode)
-Movimento do Cursor
-Tecla
-Movimento
-h
-← esquerda
-j
-↓ baixo
-k
-↑ cima
-l
-→ direita
-w
-Próxima palavra
-b
-Palavra anterior
-0
-Início da linha
-$
-Final da linha
-gg
-Início do arquivo
-G
-Final do arquivo
+## Atalhos Globais — Leader Key (SPC)
 
-Edição Rápida
-Tecla
-Ação
-x
-Deletar caractere
-dd
-Deletar linha inteira
-yy
-Copiar linha
-p
-Colar
-u
-Desfazer (undo)
-Ctrl-r
-Refazer (redo)
+### Arquivos — `SPC f`
 
+| Atalho | Ação |
+|--------|------|
+| `SPC f f` | Abrir arquivo |
+| `SPC f s` | Salvar arquivo |
+| `SPC f r` | Arquivos recentes |
 
-💻 Workflow para C
-1. Criando um projeto C
-# Criar pasta do projeto
-mkdir meu_projeto_c
-cd meu_projeto_c
+### Buffers — `SPC b`
 
-# Abrir Emacs
-emacs
+| Atalho | Ação |
+|--------|------|
+| `SPC b b` | Alternar entre buffers |
+| `SPC b d` | Fechar buffer atual |
 
-2. Estrutura típica
-meu_projeto_c/
-├── src/
-│   ├── main.c
-│   └── funcoes.c
-├── include/
-│   └── funcoes.h
-└── Makefile
+### Janelas — `SPC w`
 
-3. Fluxo de trabalho
-SPC f f → Criar/abrir main.c
-Digitar código
-SPC f s → Salvar
-SPC t t → Abrir terminal
-No terminal: gcc main.c -o programa
-Executar: ./programa
-4. Exemplo prático C
-#include <stdio.h>
+| Atalho | Ação |
+|--------|------|
+| `SPC w v` | Split vertical |
+| `SPC w s` | Split horizontal |
+| `SPC w d` | Fechar janela atual |
+| `SPC w o` | Fechar todas as outras janelas |
 
-int main() {
-    printf("Hello World!\n");
-    return 0;
-}
+### Demais
 
-Passos:
-SPC f f → digite main.c → Enter
-i (Insert Mode)
-Digite o código acima
-ESC (Normal Mode)
-SPC f s (Salvar)
-SPC t t (Terminal)
-gcc main.c -o hello
-./hello
+| Atalho | Ação |
+|--------|------|
+| `SPC e` | Abrir / fechar Explorer (Treemacs) |
+| `SPC t t` | Abrir / fechar terminal (vterm) |
+| `SPC s s` | Buscar texto no buffer atual |
+| `SPC p f` | Buscar arquivo no projeto |
+| `SPC p p` | Trocar de projeto |
+| `SPC q q` | Salvar tudo e sair |
 
-# 🌐 Workflow para JavaScript
-1. Criando projeto JavaScript
-mkdir meu_projeto_js
-cd meu_projeto_js
-npm init -y  # Se usar Node.js
+---
 
-2. Estrutura típica
-meu_projeto_js/
-├── src/
-│   ├── app.js
-│   └── utils.js
-├── package.json
-└── index.html  # Se for frontend
+## LSP — Eglot
 
-3. Fluxo de trabalho
-SPC f f → Criar/abrir app.js
-Digitar código
-SPC f s → Salvar
-SPC t t → Terminal
-node app.js → Executar
-4. Exemplo prático JavaScript
-// app.js
-function saudacao(nome) {
-    return `Olá, ${nome}!`;
-}
+O LSP é ativado automaticamente ao abrir arquivos `.clj` ou `.php`. O arquivo é formatado automaticamente ao salvar.
 
-console.log(saudacao("Mundo"));
+| Atalho | Ação |
+|--------|------|
+| `SPC l d` | Ir para a definição |
+| `SPC l r` | Renomear símbolo no projeto |
+| `SPC l f` | Formatar arquivo |
+| `SPC l a` | Code actions |
 
-Passos:
-SPC f f → digite app.js → Enter
-i (Insert Mode)
-Digite código acima
-ESC (Normal Mode)
-SPC f s (Salvar)
-SPC t t (Terminal)
-node app.js
+---
 
-# 🔥 Dicas Avançadas
-1. Múltiplos arquivos
-SPC b b → Alternar rapidamente entre arquivos abertos
-SPC w v → Split vertical para ver 2 arquivos lado a lado
-2. Busca eficiente
-SPC s s → Buscar dentro do arquivo atual
-/texto (Normal Mode) → Busca rápida
-n → Próxima ocorrência
-N → Ocorrência anterior
-3. Copy/Paste entre arquivos
-Selecione texto com v (Visual Mode)
-y → Copiar
-SPC b b → Trocar para outro arquivo
-p → Colar
-4. Formatação automática
-Salvar já formata automaticamente (configurado no LSP)
-SPC l f → Forçar formatação manual
+## Clojure — CIDER
 
-# 🐛 Debug e Compilação
-Para C
-# Terminal no Emacs (SPC t t)
-gcc -g -Wall main.c -o debug_program
-gdb ./debug_program
+### Iniciando o REPL
 
-Para JavaScript
-# Terminal no Emacs (SPC t t)
-node --inspect app.js
-# Ou apenas
-node app.js
+| Atalho | Ação |
+|--------|------|
+| `SPC c j` | Jack-in — inicia o REPL (Leiningen ou deps.edn) |
+| `SPC c J` | Jack-in para ClojureScript |
+| `SPC c c` | Conectar a um REPL remoto (nREPL) |
+| `SPC c q` | Encerrar o REPL |
 
+### Avaliação de Código
 
-# 🆘 Comandos de Emergência
-Situação
-Solução
-Travou tudo
-ESC várias vezes, depois SPC q q
-Quer sair sem salvar
-SPC q Q
-Salvou errado
-u (undo)
-Perdeu janela
-SPC w o (fechar outras)
-Terminal não aparece
-SPC t t duas vezes
+| Atalho | Ação |
+|--------|------|
+| `SPC c e` | Avaliar a forma antes do cursor |
+| `SPC c f` | Avaliar a função atual |
+| `SPC c E` | Avaliar o buffer inteiro |
+| `SPC c p` | Pretty print do resultado |
+| `SPC c i` | Inspecionar o último resultado |
 
+### REPL e Documentação
 
-# 📚 Comandos por Categoria
-Essenciais Diários
-SPC f f - Abrir arquivo
-SPC f s - Salvar
-SPC e - Explorer
-SPC t t - Terminal
-i - Insert Mode
-ESC - Normal Mode
-Programação
-SPC l d - Ir para definição
-SPC l r - Renomear
-SPC s s - Buscar
-SPC w v - Split vertical
-Gerenciamento
-SPC b b - Trocar buffer
-SPC b d - Fechar arquivo
-SPC q q - Sair salvando
+| Atalho | Ação |
+|--------|------|
+| `SPC c r` | Alternar entre arquivo e REPL |
+| `SPC c n` | Definir namespace no REPL |
+| `SPC c d` | Documentação da função sob o cursor |
 
-# 🎯 Exercício Prático
-Projeto: Calculadora em C
-Criar estrutura:
-mkdir calculadora_c
-cd calculadora_c
-emacs
+### Testes
 
-Criar arquivos:
-SPC f f → main.c
-SPC f f → calc.h
-SPC f f → calc.c
-Implementar e testar
-Compilar no terminal integrado
-Projeto: To-Do List em JavaScript
-Criar estrutura:
-mkdir todo_js
-cd todo_js
-emacs
+| Atalho | Ação |
+|--------|------|
+| `SPC c t` | Executar o teste sob o cursor |
+| `SPC c T` | Executar todos os testes do namespace |
 
-Criar arquivos:
-SPC f f → todo.js
-SPC f f → index.html
-Implementar e testar no browser/node
+### Fluxo de Trabalho Típico
 
+```
+1. Abrir arquivo .clj          →  SPC f f
+2. Iniciar o REPL              →  SPC c j
+3. Editar uma função           →  i (Insert Mode)
+4. Avaliar a função            →  SPC c f
+5. Testar no REPL              →  SPC c r
+6. Inspecionar o resultado     →  SPC c i
+7. Executar os testes          →  SPC c T
+8. Salvar                      →  SPC f s
+```
 
-# ⚡ Resumo dos Atalhos Mais Usados
-Função
-Atalho
-Use quando
-Abrir arquivo
-SPC f f
-Sempre que quiser abrir algo
-Salvar
-SPC f s
-Depois de editar
-Explorer
-SPC e
-Ver estrutura do projeto
-Terminal
-SPC t t
-Compilar/executar código
-Insert Mode
-i
-Digitar código
-Normal Mode
-ESC
-Navegar/comandos
-Buscar
-SPC s s
-Encontrar texto
-Ir para definição
-SPC l d
-Entender código
+> O Paredit está ativo em arquivos Clojure e no buffer do REPL, garantindo que os parênteses permaneçam sempre balanceados.
 
+---
 
-🤝 Contribuições
-Pull requests são bem-vindos! Para mudanças grandes, abra uma issue primeiro.
-📄 Licença
-MIT - Use como quiser!
+## PHP
 
-Enjoy coding! 🎉
+### Atalhos — `SPC h`
+
+| Atalho | Ação |
+|--------|------|
+| `SPC h t` | Executar o teste sob o cursor |
+| `SPC h T` | Executar todos os testes da classe |
+
+Os atalhos LSP (`SPC l`) também funcionam em arquivos PHP, com formatação conforme PSR-2.
+
+### Fluxo de Trabalho Típico
+
+```
+1. Abrir arquivo .php               →  SPC f f
+2. Editar o código                  →  i (Insert Mode)
+3. Salvar (formata automaticamente) →  SPC f s
+4. Executar testes da classe        →  SPC h T
+5. Aplicar correções do LSP         →  SPC l a
+```
+
+---
+
+## Resolução de Problemas
+
+| Situação | Solução |
+|----------|---------|
+| Emacs parece travado | Pressione `ESC` várias vezes |
+| Atalho `SPC` não funciona | Confirme que está no Normal Mode |
+| LSP não inicia (Clojure) | Verifique se `clojure-lsp` está no PATH |
+| LSP não inicia (PHP) | `npm install -g intelephense` |
+| REPL não conecta | Verifique se `project.clj` ou `deps.edn` existe na raiz |
+| Terminal não aparece | Execute `SPC t t` duas vezes |
+| Quer sair sem salvar | `SPC q q` e responda `no` para os buffers modificados |
+
+---
+
+## Licença
+
+MIT — use como quiser.
