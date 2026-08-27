@@ -1,6 +1,6 @@
-# Emacs — Configuração Minimalista para Clojure & PHP
+# Emacs — Configuração Minimalista para Clojure, Python & Bancos de Dados
 
-Configuração do Emacs focada em produtividade para desenvolvimento Clojure e PHP, com Evil Mode, CIDER REPL, LSP via Eglot e Projectile.
+Configuração do Emacs focada em produtividade para desenvolvimento Clojure, Python e trabalho com bancos de dados (SQL/JSON), com Evil Mode, CIDER REPL, LSP via Eglot, autocomplete via Corfu e Projectile.
 
 ---
 
@@ -11,9 +11,12 @@ Antes de usar, instale as seguintes ferramentas no sistema:
 | Ferramenta | Finalidade | Instalação |
 |------------|------------|------------|
 | `clojure-lsp` | LSP para Clojure | [clojure-lsp.io](https://clojure-lsp.io) |
-| `intelephense` | LSP para PHP | `npm install -g intelephense` |
+| `pyright` | LSP para Python | `npm install -g pyright` |
+| `sqls` | LSP para SQL | `go install github.com/lighttiger2505/sqls@latest` |
 | `leiningen` | Gerenciador de projetos Clojure | [leiningen.org](https://leiningen.org) |
-| `vterm` | Terminal integrado | Requer suporte a `libvterm` na compilação do Emacs |
+| `vterm` | Terminal integrado | Requer `libvterm`, `cmake` e `libtool` na compilação |
+
+> Alternativa ao `pyright`: `python-lsp-server` (`pip install python-lsp-server`), trocando `pyright-langserver` por `pylsp` na config.
 
 ---
 
@@ -21,13 +24,15 @@ Antes de usar, instale as seguintes ferramentas no sistema:
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/seu-repo.git ~/.emacs.d
+git clone https://github.com/Johnenistfk/emacs.git ~/.config/emacs
 
 # Inicie o Emacs — os pacotes serão instalados automaticamente
 emacs
 ```
 
 Na primeira inicialização o Emacs baixa e instala todos os pacotes automaticamente. Aguarde a conclusão antes de abrir qualquer arquivo.
+
+> **Importante:** certifique-se de que não existe uma configuração antiga em `~/.emacs.d`, pois o Emacs prioriza esse caminho sobre `~/.config/emacs`. Renomeie ou remova `~/.emacs.d` antes de usar esta configuração.
 
 ---
 
@@ -80,6 +85,19 @@ O Evil Mode emula o Vim dentro do Emacs. Existem três estados principais:
 
 ---
 
+## Autocomplete — Corfu
+
+Sugestões aparecem automaticamente em um popup enquanto você digita, alimentadas pelos dados do LSP (Eglot) e por `dabbrev`/arquivos locais via Cape. Não exige atalho — funciona em qualquer buffer de código.
+
+| Tecla (no popup) | Ação |
+|-------------------|------|
+| `TAB` / `C-n` | Próxima sugestão |
+| `S-TAB` / `C-p` | Sugestão anterior |
+| `RET` | Confirmar seleção |
+| `ESC` | Fechar popup |
+
+---
+
 ## Atalhos Globais — Leader Key (SPC)
 
 ### Arquivos — `SPC f`
@@ -121,7 +139,7 @@ O Evil Mode emula o Vim dentro do Emacs. Existem três estados principais:
 
 ## LSP — Eglot
 
-O LSP é ativado automaticamente ao abrir arquivos `.clj` ou `.php`. O arquivo é formatado automaticamente ao salvar.
+O LSP é ativado automaticamente ao abrir arquivos `.clj`, `.py` ou `.sql`. O arquivo é formatado automaticamente ao salvar.
 
 | Atalho | Ação |
 |--------|------|
@@ -185,26 +203,63 @@ O LSP é ativado automaticamente ao abrir arquivos `.clj` ou `.php`. O arquivo �
 
 ---
 
-## PHP
+## Python
 
-### Atalhos — `SPC h`
+### Atalhos — `SPC y`
 
 | Atalho | Ação |
 |--------|------|
-| `SPC h t` | Executar o teste sob o cursor |
-| `SPC h T` | Executar todos os testes da classe |
+| `SPC y v` | Ativar virtualenv (pyvenv) |
+| `SPC y V` | Desativar virtualenv |
+| `SPC y r` | Ir para o REPL do Python |
+| `SPC y e` | Avaliar região selecionada |
+| `SPC y b` | Avaliar buffer inteiro |
 
-Os atalhos LSP (`SPC l`) também funcionam em arquivos PHP, com formatação conforme PSR-2.
+Os atalhos LSP (`SPC l`) também funcionam em arquivos Python, com formatação automática ao salvar via `pyright`.
 
 ### Fluxo de Trabalho Típico
 
 ```
-1. Abrir arquivo .php               →  SPC f f
-2. Editar o código                  →  i (Insert Mode)
-3. Salvar (formata automaticamente) →  SPC f s
-4. Executar testes da classe        →  SPC h T
+1. Ativar o virtualenv do projeto   →  SPC y v
+2. Abrir arquivo .py                →  SPC f f
+3. Editar o código                  →  i (Insert Mode)
+4. Avaliar o buffer no REPL         →  SPC y b
 5. Aplicar correções do LSP         →  SPC l a
+6. Salvar (formata automaticamente) →  SPC f s
 ```
+
+---
+
+## SQL
+
+### Atalhos — `SPC d`
+
+| Atalho | Ação |
+|--------|------|
+| `SPC d c` | Conectar a um banco de dados |
+| `SPC d r` | Executar região selecionada |
+| `SPC d b` | Executar buffer inteiro |
+
+Por padrão o `sql-product` está configurado como `postgres`. Para trocar (MySQL, SQLite, Oracle etc.), ajuste a variável `sql-product` no `init.el`.
+
+Os atalhos LSP (`SPC l`) também funcionam em arquivos `.sql`, incluindo formatação e ida à definição de tabelas/colunas via `sqls`.
+
+### Fluxo de Trabalho Típico
+
+```
+1. Abrir arquivo .sql               →  SPC f f
+2. Conectar ao banco                →  SPC d c
+3. Escrever a query                 →  i (Insert Mode)
+4. Executar a região selecionada    →  SPC d r
+5. Formatar o arquivo                →  SPC l f
+6. Salvar                           →  SPC f s
+```
+
+---
+
+## JSON
+
+Arquivos `.json` são reconhecidos automaticamente pelo `json-mode`, com indentação de 2 espaços e realce de sintaxe. Não há LSP dedicado para JSON nesta configuração — o autocomplete de chaves/valores usa `dabbrev` (Corfu/Cape) baseado no que já existe no buffer.
 
 ---
 
@@ -215,8 +270,11 @@ Os atalhos LSP (`SPC l`) também funcionam em arquivos PHP, com formatação con
 | Emacs parece travado | Pressione `ESC` várias vezes |
 | Atalho `SPC` não funciona | Confirme que está no Normal Mode |
 | LSP não inicia (Clojure) | Verifique se `clojure-lsp` está no PATH |
-| LSP não inicia (PHP) | `npm install -g intelephense` |
-| REPL não conecta | Verifique se `project.clj` ou `deps.edn` existe na raiz |
+| LSP não inicia (Python) | Verifique se `pyright` está instalado (`npm install -g pyright`) |
+| LSP não inicia (SQL) | Verifique se `sqls` está no PATH (`~/go/bin`) |
+| Autocomplete não aparece | Confirme que `corfu-mode` está ativo (`M-x corfu-mode`) |
+| Aviso sobre `straight.el` ao iniciar | Existe uma configuração antiga em `~/.emacs.d`; remova ou renomeie essa pasta |
+| REPL não conecta (Clojure) | Verifique se `project.clj` ou `deps.edn` existe na raiz |
 | Terminal não aparece | Execute `SPC t t` duas vezes |
 | Quer sair sem salvar | `SPC q q` e responda `no` para os buffers modificados |
 
