@@ -1,4 +1,4 @@
-;; init.el - Emacs para Clojure & PHP
+;; init.el - Emacs para Clojure, Python & Bancos de Dados (SQL/JSON)
 
 ;; -------------------------
 ;; Configurações básicas
@@ -12,6 +12,10 @@
       use-dialog-box nil
       initial-major-mode 'fundamental-mode
       gc-cons-threshold (* 50 1000 1000))
+
+;; Restaura o gc-cons-threshold depois do startup (evita pausas de GC durante o uso)
+(add-hook 'emacs-startup-hook
+          (lambda () (setq gc-cons-threshold (* 2 1000 1000))))
 
 ;; UI limpa
 (menu-bar-mode -1)
@@ -32,6 +36,8 @@
       '(("melpa" . "https://melpa.org/packages/")
         ("gnu"   . "https://elpa.gnu.org/packages/")))
 
+(package-initialize)
+
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -40,6 +46,15 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+;; -------------------------
+;; PATH herdado do shell (essencial em GUI no Linux/macOS)
+;; Necessário para o Emacs encontrar clojure-lsp, pyright, sqls etc.
+;; -------------------------
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+  :config
+  (exec-path-from-shell-initialize))
 
 ;; -------------------------
 ;; Evil mode
@@ -96,29 +111,54 @@
   :after ivy)
 
 ;; -------------------------
+;; Autocomplete (Corfu + Cape)
+;; -------------------------
+(use-package corfu
+  :init
+  (global-corfu-mode)
+  :config
+  (setq corfu-auto t
+        corfu-auto-delay 0.15
+        corfu-auto-prefix 1
+        corfu-cycle t
+        corfu-preselect 'prompt))
+
+(use-package cape
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev))
+
+;; -------------------------
 ;; LSP com Eglot
 ;; -------------------------
 (use-package eglot
-  :hook ((php-mode . eglot-ensure)
-         (js-mode  . eglot-ensure))
+  :hook ((python-mode . eglot-ensure)
+         (sql-mode    . eglot-ensure))
   :config
   ;; clojure-lsp registrado manualmente
   (add-to-list 'eglot-server-programs
                '(clojure-mode . ("clojure-lsp")))
+  ;; pyright como servidor LSP de Python (troque para "pylsp" se preferir)
+  (add-to-list 'eglot-server-programs
+               '(python-mode . ("pyright-langserver" "--stdio")))
+  ;; sqls como servidor LSP de SQL
+  (add-to-list 'eglot-server-programs
+               '(sql-mode . ("sqls")))
   (add-hook 'eglot-managed-mode-hook
             (lambda ()
               (add-hook 'before-save-hook #'eglot-format-buffer -10 t))))
 
 ;; -------------------------
-;; PHP
+;; Python
 ;; -------------------------
-(use-package php-mode
-  :hook (php-mode . eglot-ensure)
+(use-package python
+  :ensure nil
+  :hook (python-mode . eglot-ensure)
   :config
-  (setq php-mode-coding-style 'psr2))
+  (setq python-indent-offset 4))
 
-(use-package phpunit
-  :after php-mode)
+(use-package pyvenv
+  :config (pyvenv-mode 1))
 
 ;; -------------------------
 ;; Clojure
@@ -130,18 +170,13 @@
 (use-package cider
   :after clojure-mode
   :config
-  ;; REPL geral
   (setq cider-repl-display-help-banner nil
         cider-repl-use-pretty-printing t
         cider-repl-buffer-size-limit 100000
-        ;; Salvar arquivo antes de carregar no REPL
         cider-save-file-on-load t
-        ;; Namespace abreviado no prompt
         cider-repl-prompt-function 'cider-repl-prompt-abbreviated
-        ;; REPL abre ao lado, não sobrepõe o código
         cider-repl-display-in-current-window nil
         cider-repl-pop-to-buffer-on-connect 'display-only
-        ;; Erros
         cider-show-error-buffer t
         cider-auto-select-error-buffer t))
 
@@ -161,6 +196,27 @@
 (use-package rainbow-delimiters
   :hook ((clojure-mode    . rainbow-delimiters-mode)
          (emacs-lisp-mode . rainbow-delimiters-mode)))
+
+;; -------------------------
+;; SQL
+;; -------------------------
+(use-package sql
+  :ensure nil
+  :hook (sql-mode . eglot-ensure)
+  :config
+  ;; Ajuste o produto padrão conforme seu banco (postgres, mysql, sqlite, etc.)
+  (setq sql-product 'postgres))
+
+(use-package sql-indent
+  :hook (sql-mode . sqlind-minor-mode))
+
+;; -------------------------
+;; JSON
+;; -------------------------
+(use-package json-mode
+  :mode "\\.json\\'"
+  :config
+  (setq js-indent-level 2))
 
 ;; -------------------------
 ;; Treesit
@@ -272,10 +328,19 @@
   "cd"  '(cider-doc :which-key "documentação")
   "cn"  '(cider-repl-set-ns :which-key "setar namespace")
 
-  ;; PHP
-  "h"   '(:ignore t :which-key "php")
-  "ht"  '(phpunit-current-test :which-key "rodar teste")
-  "hT"  '(phpunit-current-class :which-key "rodar classe")
+  ;; Python
+  "y"   '(:ignore t :which-key "python")
+  "yv"  '(pyvenv-activate :which-key "ativar venv")
+  "yV"  '(pyvenv-deactivate :which-key "desativar venv")
+  "yr"  '(python-shell-switch-to-shell :which-key "ir pro REPL")
+  "ye"  '(python-shell-send-region :which-key "eval região")
+  "yb"  '(python-shell-send-buffer :which-key "eval buffer")
+
+  ;; SQL
+  "d"   '(:ignore t :which-key "database/sql")
+  "dr"  '(sql-send-region :which-key "rodar região")
+  "db"  '(sql-send-buffer :which-key "rodar buffer")
+  "dc"  '(sql-connect :which-key "conectar")
 
   ;; Projeto
   "p"   '(:ignore t :which-key "projeto")
@@ -296,7 +361,7 @@
 
 (add-hook 'emacs-startup-hook 'my/clean-startup)
 
-(message "🚀 Emacs pronto — Clojure & PHP!")
+(message "🚀 Emacs pronto — Clojure, Python & SQL/JSON!")
 
 (provide 'init)
 ;;; init.el ends here
